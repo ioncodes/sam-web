@@ -6,8 +6,15 @@ var keystone;
 var asmInput;
 var bytesOutput;
 
+var marker;
+
+initMarker();
 initEditor();
 initKeystone();
+
+function initMarker() {
+	marker = new Mark(document.querySelector('code'));
+}
 
 function initEditor() {
 	asmInput = ace.edit('assembly');
@@ -33,6 +40,15 @@ function initKeystoneEngine() {
 	}
 	keystone = new ks.Keystone(arch, mode);
 	keystone.option(ks.OPT_SYNTAX, syntax);
+}
+
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 }
 
 function initKeystone() {
@@ -68,6 +84,28 @@ function initKeystone() {
 `[ ` + array + ` ]
 { ` + array + ` }`
 		);
+		let arrSplitted = array.split(', ');
+		let bytesSplitted = bytesString.split('\n');
+		let mark = '';
+		let count = 0;
+		for(let i = 0; i < bytesSplitted.length; i++) {
+			let len = bytesSplitted[i].split(' ').length;
+			for(let j = 0; j < len; j++) {
+				mark += arrSplitted[count + j];
+				if(j !== len - 1) {
+					mark += ', ';
+				}
+			}
+			count += len;
+			let color = getRandomColor();
+			marker.mark(mark, {
+				'each': function(m) {
+					m.setAttribute('style', 'color: ' + color);
+				},
+				'separateWordSearch': false,
+			});
+			mark = '';
+		}
 	});
 
 	window.onunload = function() {
