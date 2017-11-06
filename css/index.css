@@ -1,7 +1,14 @@
 .editor {
-	height: 500px;
+	height: 300px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
-body {
-	
+#array {
+	font-size: 22px;
+}
+
+code {
+	display: block;
+	white-space: pre-wrap   
 }
